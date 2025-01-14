@@ -28,7 +28,7 @@ export class DAO<T> {
     public create(item: T, callback: (error: Error | null, insertId?: number) => void): void {
         DB.init();
         const db = DB.getDb();
-        const queryString: string = `INSERT INTO cx__${this.tableName} SET ?`;
+        const queryString: string = `INSERT INTO ${process.env.DB_NAME}__${this.tableName} SET ?`;
         db.query(queryString, item, (error, result) => {
             if (error) {
                 return callback(error);
@@ -60,7 +60,7 @@ export class DAO<T> {
     public find(where: string, select: string = '*', queryString?: string): Promise<T[]> {
         DB.init();
         const db = DB.getDb();
-        const query: string = queryString || `SELECT ${select} FROM cx__${this.tableName} ${where}`;        
+        const query: string = queryString || `SELECT ${select} FROM ${process.env.DB_NAME}__${this.tableName} ${where}`;        
         
         const result = new Promise<T[]>((resolve, reject) => {
             db.query(query, (error, results) => {
@@ -96,7 +96,7 @@ export class DAO<T> {
     public findById(id: number, select: string = '*', queryString?: string): Promise<T[]> {
         DB.init();
         const db = DB.getDb();
-        const query: string = queryString || `SELECT ${select} FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
+        const query: string = queryString || `SELECT ${select} FROM ${process.env.DB_NAME}__${this.tableName} WHERE id_${this.tableName} = ?`;
         
         const result = new Promise<T[]>((resolve, reject) => {
             db.query(query, [id], (error, results) => {
@@ -132,7 +132,7 @@ export class DAO<T> {
     public update(id: number, item: Partial<T>, callback: (error: Error | null, affectedRows?: number) => void): void {
         DB.init();
         const db = DB.getDb();
-        const queryString: string = `UPDATE cx__${this.tableName} SET ? WHERE id_${this.tableName} = ?`;
+        const queryString: string = `UPDATE ${process.env.DB_NAME}__${this.tableName} SET ? WHERE id_${this.tableName} = ?`;
         db.query(queryString, [item, id], (error, result) => {
             if (error) {
                 return callback(error);
@@ -163,7 +163,7 @@ export class DAO<T> {
     public delete(id: number, callback: (error: Error | null, affectedRows?: number) => void): void {
         DB.init();
         const db = DB.getDb();
-        const query: string = `DELETE FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
+        const query: string = `DELETE FROM ${process.env.DB_NAME}__${this.tableName} WHERE id_${this.tableName} = ?`;
         db.query(query, [id], (error, result) => {
             if (error) {
                 return callback(error);
